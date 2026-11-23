@@ -10,6 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
+  <!-- Nạp sớm trong <head> để áp màu chủ đạo đã lưu TRƯỚC khi trang hiển thị (không bị nháy màu mặc định) -->
+  <script src="/js/theme.js"></script>
 </head>
 
 <body>
@@ -99,6 +101,71 @@
               <span class="view-icon">📋</span><span class="view-label">List</span>
             </button>
           </div>
+
+          <!-- ============ CHỌN MÀU CHỦ ĐẠO (logic: /js/theme.js) ============ -->
+          <div class="theme-picker" id="themePicker">
+            <button class="theme-btn" id="themeBtn" type="button"
+                    aria-haspopup="dialog" aria-expanded="false" aria-controls="themePanel"
+                    title="Đổi màu chủ đạo">
+              <span class="theme-dot"></span>
+              <span class="theme-btn-label">Màu</span>
+              <span class="theme-lock" id="themeLockIcon" hidden>🔒</span>
+            </button>
+
+            <div class="theme-panel" id="themePanel" role="dialog" aria-label="Chọn màu chủ đạo">
+              <div class="theme-panel-head">
+                <div>
+                  <div class="theme-panel-title">🎨 Màu chủ đạo</div>
+                  <div class="theme-panel-sub">Chọn màu bạn thích, xem trước ngay, rồi khóa lại để dùng lâu dài.</div>
+                </div>
+                <button class="theme-close" id="themeClose" type="button" aria-label="Đóng">✕</button>
+              </div>
+
+              <div class="theme-locked" id="themeLocked" hidden>
+                <span>🔒 Màu đang được khóa</span>
+                <button type="button" class="theme-link-btn" id="themeUnlock">Mở khóa để chỉnh</button>
+              </div>
+
+              <div class="theme-body">
+                <div class="theme-section-label">Màu gợi ý</div>
+                <div class="theme-swatches" id="themeSwatches"><!-- theme.js render --></div>
+
+                <div class="theme-section-label">Tùy chỉnh</div>
+                <div class="theme-preview">
+                  <span class="theme-preview-chip" id="themeChip"></span>
+                  <input type="text" id="themeHex" maxlength="7" spellcheck="false" autocomplete="off" aria-label="Mã màu HEX">
+                  <label class="theme-native" title="Mở bảng màu đầy đủ">
+                    <span>🎯</span>
+                    <input type="color" id="themeNative" aria-label="Bảng màu đầy đủ">
+                  </label>
+                </div>
+
+                <label class="theme-slider">
+                  <span class="theme-slider-head"><span>Sắc màu</span><b id="themeHueVal"></b></span>
+                  <input type="range" id="themeHue" min="0" max="360" step="1">
+                </label>
+                <label class="theme-slider">
+                  <span class="theme-slider-head"><span>Độ đậm</span><b id="themeSatVal"></b></span>
+                  <input type="range" id="themeSat" min="0" max="100" step="1">
+                </label>
+                <label class="theme-slider">
+                  <span class="theme-slider-head"><span>Độ sáng</span><b id="themeLightVal"></b></span>
+                  <input type="range" id="themeLight" min="28" max="56" step="1">
+                </label>
+
+                <div class="theme-warning" id="themeWarning" hidden>
+                  ⚠️ Màu này khá sáng nên chữ trắng trên nút có thể khó đọc. Thử giảm độ sáng một chút.
+                </div>
+              </div>
+
+              <div class="theme-actions">
+                <button type="button" class="theme-btn-ghost" id="themeReset" title="Quay về màu xanh lá mặc định">Mặc định</button>
+                <button type="button" class="theme-btn-ghost" id="themeCancel">Hủy</button>
+                <button type="button" class="theme-btn-primary" id="themeApply">🔒 Áp dụng &amp; khóa</button>
+              </div>
+            </div>
+          </div>
+
           <div class="result-count" id="resultCount"></div>
         </div>
       </section>

@@ -277,8 +277,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Phím tắt "/" để nhảy vào ô tìm kiếm từ bất kỳ đâu trên trang
+  // (bỏ qua khi đang gõ trong ô nhập khác, vd: ô mã màu HEX của bảng chọn màu)
   document.addEventListener('keydown', (e) => {
-    if (e.key === '/' && document.activeElement !== searchInput) {
+    const el = document.activeElement;
+    const typing = el && (['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName) || el.isContentEditable);
+    if (e.key === '/' && !typing) {
       e.preventDefault();
       searchInput.focus();
     }

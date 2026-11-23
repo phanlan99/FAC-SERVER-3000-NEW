@@ -12,7 +12,8 @@
  *  - Tự giảm số node nếu máy chậm; chậm hơn nữa thì tắt hẳn canvas.
  *  - Máy tắt hiệu ứng động (prefers-reduced-motion) -> chỉ vẽ 1 khung tĩnh.
  *
- *  Muốn chỉnh mật độ / tốc độ / màu: sửa CONFIG và COLORS bên dưới.
+ *  Muốn chỉnh mật độ / tốc độ: sửa CONFIG bên dưới.
+ *  Màu tự lấy theo màu chủ đạo (biến CSS --brand-*), đổi theo theme.js.
  * ==========================================================================
  */
 (() => {
@@ -38,14 +39,22 @@
     pulseDuration: 1500,  // ms để gói dữ liệu chạy hết 1 đường nối
   };
 
-  // Màu theo palette xanh của trang (định dạng "r,g,b" để ghép alpha)
-  const COLORS = {
-    node:  '23,160,90',
-    hub:   '16,107,65',
-    link:  '20,138,79',
-    pulse: '52,193,122',
-    mouse: '23,160,90',
-  };
+  // Màu lấy từ biến CSS của màu chủ đạo (theme.js đổi biến -> canvas đổi theo).
+  // Giá trị "r, g, b" để ghép alpha; giá trị thứ 2 là dự phòng nếu chưa có biến.
+  let COLORS = {};
+
+  function readColors() {
+    const cs = getComputedStyle(document.documentElement);
+    const v = (name, fallback) => cs.getPropertyValue(name).trim() || fallback;
+    COLORS = {
+      node:  v('--brand-500-rgb', '23, 160, 90'),
+      hub:   v('--brand-700-rgb', '16, 107, 65'),
+      link:  v('--brand-600-rgb', '20, 138, 79'),
+      pulse: v('--brand-400-rgb', '52, 193, 122'),
+      mouse: v('--brand-500-rgb', '23, 160, 90'),
+    };
+  }
+  readColors();
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const lowPower =
@@ -375,6 +384,12 @@
   };
   if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', onMotionChange);
   else if (reduceMotion.addListener) reduceMotion.addListener(onMotionChange);
+
+  // Đổi màu chủ đạo -> đọc lại màu, vẽ lại ngay nếu đang ở chế độ tĩnh
+  window.addEventListener('fac:themechange', () => {
+    readColors();
+    if (!rafId && !disabled) drawFrame(performance.now());
+  });
 
   /* ============ Khởi động ============ */
   resize();
