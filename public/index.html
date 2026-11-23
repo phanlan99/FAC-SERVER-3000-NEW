@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAC SERVER</title>
+  <link rel="icon" type="image/x-icon" href="img/fav.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Mở menu">☰</button>
+  <div class="sidebar-scrim" id="sidebarScrim"></div>
+
+  <!-- ============ SIDEBAR ============ -->
+  <!-- Nội dung bên trong (danh mục, danh mục con...) được render tự động
+       bởi main.js dựa trên cấu hình khai báo trong /js/data.js -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <img src="/img/logo.png" alt="FAC SERVER Logo">
+      <div>
+        <div class="brand-name">FAC SERVER</div>
+        <div class="brand-sub">DASHBOARD SERVER</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav" id="sidebarNav">
+      <!-- được main.js render tự động -->
+    </nav>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+
+    <!-- ============ HEADER CỐ ĐỊNH ============ -->
+    <!-- Topbar + banner + content-header luôn dính trên đầu khi cuộn.
+         main.js thêm class "is-stuck" để thu gọn khi đã cuộn xuống. -->
+    <div class="sticky-head" id="stickyHead">
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1>FAC SERVER</h1>
+          <p>Cổng truy cập trung tâm cho hệ thống nhà máy</p>
+        </div>
+
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Tìm theo tên, ví dụ: HeatPress…" autocomplete="off">
+          <button class="search-clear" id="searchClear" aria-label="Xoá tìm kiếm">✕</button>
+          <span class="search-kbd">/</span>
+        </div>
+
+        <div class="datetime-display">
+          <div class="date" id="currentDate"></div>
+          <div class="time" id="currentTime"></div>
+        </div>
+      </header>
+
+      <!-- Chữ chạy: chỉ cần sửa nội dung trong .hny-item,
+           main.js sẽ tự nhân bản để chạy liền mạch với tốc độ cố định. -->
+      <div class="hny-banner" id="hnyBanner">
+        <div class="hny-track">
+          <span class="hny-item">🌿 CHÀO MỪNG BẠN ĐẾN VỚI FAC SERVER - CHÚC BẠN LÀM VIỆC MỘT NGÀY THẬT NĂNG SUẤT VÀ HIỆU QUẢ 🎆</span>
+        </div>
+      </div>
+
+      <section class="content-header">
+        <div>
+          <div class="page-title" id="pageTitle">💠 Tất cả hệ thống</div>
+          <div class="page-sub" id="pageSub">Toàn bộ dashboard, camera &amp; công cụ giám sát</div>
+        </div>
+
+        <div class="content-header-right">
+          <div class="view-toggle" id="viewToggle">
+            <span class="view-toggle-highlight" id="viewToggleHighlight"></span>
+            <button class="view-btn active" data-view="grid" type="button">
+              <span class="view-icon">🎛️</span><span class="view-label">Grid</span>
+            </button>
+            <button class="view-btn" data-view="list" type="button">
+              <span class="view-icon">📋</span><span class="view-label">List</span>
+            </button>
+          </div>
+          <div class="result-count" id="resultCount"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Các thẻ card được main.js render tự động từ /js/data.js,
+         kèm số thứ tự (01, 02, ...) tính tự động theo vị trí trong dữ liệu.
+         Class "list-view" trên #dashboardGrid do main.js thêm/bớt sẽ tự
+         chuyển layout của CHÍNH các card này sang dạng hàng ngang. -->
+    <div class="dashboard-grid" id="dashboardGrid"></div>
+
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <div class="emoji">🔍</div>
+      <p>Không có mục nào trong danh mục này.</p>
+    </div>
+
+    <footer class="site-footer">&copy; 2026 FAC SERVER. All rights reserved.</footer>
+  </div>
+
+  <script src="/js/data.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/statuscam.js"></script>
+  <script src="/js/statuslink.js"></script>
+</body>
+
+</html>
