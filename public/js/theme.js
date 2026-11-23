@@ -311,6 +311,7 @@
       isOpen = true;
       panel.classList.add('open');
       btn.setAttribute('aria-expanded', 'true');
+      window.dispatchEvent(new CustomEvent('fac:themepanel', { detail: { open: true } }));
       updateLockUI();
       syncControls();
       setTimeout(() => {
@@ -330,6 +331,7 @@
       }
       panel.classList.remove('open');
       btn.setAttribute('aria-expanded', 'false');
+      window.dispatchEvent(new CustomEvent('fac:themepanel', { detail: { open: false, committed: !!commit } }));
     }
 
     function applyAndLock() {
@@ -337,6 +339,7 @@
       writeSaved(saved);
       applyColor(draft, { animate: true });
       updateLockUI();
+      window.dispatchEvent(new CustomEvent('fac:themelocked', { detail: { color: draft } }));
       close(true);
       btn.focus({ preventScroll: true });
     }
@@ -352,6 +355,7 @@
       saved = { color: saved.color, locked: false };
       writeSaved(saved);
       updateLockUI();
+      window.dispatchEvent(new CustomEvent('fac:themeunlocked'));
       const first = swatchWrap.querySelector('.selected') || swatchWrap.firstChild;
       if (first) first.focus({ preventScroll: true });
     });
@@ -378,12 +382,16 @@
     nativeInput.addEventListener('input', () => setDraft(nativeInput.value, 'native'));
 
     // Click ra ngoài -> hủy & đóng
+    // (bỏ qua click trên lớp hướng dẫn tour — tour tự điều khiển bảng màu)
     document.addEventListener('mousedown', e => {
-      if (isOpen && !picker.contains(e.target)) close(false);
+      if (!isOpen || picker.contains(e.target)) return;
+      if (e.target.closest && e.target.closest('.tour-layer')) return;
+      close(false);
     });
 
     // Esc -> hủy & đóng
     document.addEventListener('keydown', e => {
+      if (root.classList.contains('tour-active')) return; // đang xem hướng dẫn -> Esc do tour.js xử lý
       if (isOpen && e.key === 'Escape') {
         e.stopPropagation();
         close(false);
@@ -402,13 +410,23 @@
       updateLockUI();
     });
 
-    updateLockUI();
-  }
+    // Nút ❔ xem lại hướng dẫn (tour.js)
+    const replayBtn = $('themeTourReplay');
+    if (replayBtn) {
+      replayBtn.addEventListener('click', () => {
+        if (window.FacTour) window.FacTour.start();
+      });
+    }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initPicker);
-  } else {
-    initPicker();
+    // API cho tour.js điều khiển bảng màu
+    window.FacTheme.picker = {
+      open: () => { if (!isOpen) open(); },
+      close: (commit = false) => close(commit),
+      isOpen: () => isOpen,
+      isLocked: () => !!saved.locked,
+    };
+
+    updateLockUI();
   }
 
   // API dùng chung (vd: gọi từ console hoặc tính năng khác)
@@ -423,4 +441,9 @@
       applyColor(DEFAULT_COLOR, { animate: true });
     },
   };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPicker);
+  } else {
+    initPicker();
+  }
 })();
