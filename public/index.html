@@ -37,6 +37,21 @@
   <!-- ============ MAIN ============ -->
   <div class="main">
 
+    <!-- ============ NỀN ĐỘNG CHO VÙNG MAIN ============ -->
+    <!-- Chỉ để trang trí, nằm dưới toàn bộ nội dung, không nhận click.
+         Gồm 3 lớp: dải màu aurora trôi chậm, lưới kỹ thuật chạy nhẹ,
+         và canvas mạng lưới IoT (do /js/background.js vẽ). -->
+    <div class="main-bg" id="mainBg" aria-hidden="true">
+      <div class="bg-aurora">
+        <span class="bg-blob blob-1"></span>
+        <span class="bg-blob blob-2"></span>
+        <span class="bg-blob blob-3"></span>
+      </div>
+      <div class="bg-grid"></div>
+      <canvas class="bg-canvas" id="bgCanvas"></canvas>
+      <div class="bg-vignette"></div>
+    </div>
+
     <!-- ============ HEADER CỐ ĐỊNH ============ -->
     <!-- Topbar + banner + content-header luôn dính trên đầu khi cuộn.
          main.js thêm class "is-stuck" để thu gọn khi đã cuộn xuống. -->
@@ -105,6 +120,7 @@
 
   <script src="/js/data.js"></script>
   <script src="/js/main.js"></script>
+  <script src="/js/background.js"></script>
   <script src="/js/statuscam.js"></script>
   <script src="/js/statuslink.js"></script>
 </body>
